@@ -14,6 +14,7 @@ td-agent-gem install pkg/fluent-plugin-lets-chat-0.0.1.gem
 
 ## Usage
 
+```
 <source letschat.sample.*>
   type lets_chat_http
   port 8888
@@ -49,7 +50,7 @@ td-agent-gem install pkg/fluent-plugin-lets-chat-0.0.1.gem
   #   key2:nest2_1: value2_1
   lcb_keys key1,key2:nest2_1
 </match>
-
+```
 
 ## Development
 
