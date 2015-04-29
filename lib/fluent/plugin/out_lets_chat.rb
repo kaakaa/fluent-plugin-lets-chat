@@ -73,8 +73,12 @@ module Fluent
     def deep_fetch(record, key)
       rec = record
       key.split(":").each{ |k|
-        rec = rec[k]
-        raise StandardError if rec.nil?
+	if rec.is_a?(Array)
+	  rec = rec.map{|r| r[k] unless (r.nil? || r.is_a?(String))}
+	else
+          rec = rec[k]
+	end
+        raise StandardError if (rec.nil? || rec.compact.empty?)
       }
       rec
     end
