@@ -25,7 +25,10 @@ class LetsChatHttpInput < Test::Unit::TestCase
   end
 
   def test_parse_params_any
-    conf = CONFIG << "json_key 'payload'"
+    conf = %[
+      #{CONFIG}
+			json_key 'payload'
+	  ]
 
     d = create_driver(conf)
     time = Time.parse("2015-01-01 00:00:00 UTF").to_i
@@ -41,7 +44,28 @@ class LetsChatHttpInput < Test::Unit::TestCase
     end
   end
 
+  def test_parse_params_any_error
+    conf = %[
+      #{CONFIG}
+			json_key 'payload'
+	  ]
+
+    d = create_driver(conf)
+    time = Time.parse("2015-01-01 00:00:00 UTF").to_i
+    Fluent::Engine.now = time
+
+		d.run do
+      res = post("/letschat.hoge", {"json" => {"a" => 1}})
+		  assert_equal "400", res.code
+		  assert_equal "400 Bad Request\npayload parameter is required\n", res.body
+
+      res = post("/letschat.hoge", {"payload"=> {"a" => 1}})
+		end
+  end
+
   def test_parse_params
+		conf = CONFIG
+
     d = create_driver
     time = Time.parse("2015-01-01 00:00:00 UTF").to_i
     Fluent::Engine.now = time
