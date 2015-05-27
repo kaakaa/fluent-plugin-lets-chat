@@ -32,6 +32,7 @@ def unused_port
 end
 
 require 'fluent/plugin/in_lets_chat_http'
+require 'fluent/plugin/out_lets_chat'
 
 class Test::Unit::TestCase
 end

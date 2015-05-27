@@ -1,5 +1,5 @@
 module Fluent
-  class LetsChatPlugin < Output
+  class LetsChatOutput < Output
     Fluent::Plugin.register_output('lets_chat', self)
 
     config_param :lcb_host, :string, :default => 'localhost'
@@ -73,12 +73,12 @@ module Fluent
     def deep_fetch(record, key)
       rec = record
       key.split(":").each{ |k|
-	if rec.is_a?(Array)
-	  rec = rec.map{|r| r[k] unless (r.nil? || r.is_a?(String))}
-	else
+        if rec.is_a?(Array)
+          rec = rec.map{|r| r[k] unless (r.nil? || r.is_a?(String))}.compact
+        else
           rec = rec[k]
-	end
-        raise StandardError if (rec.nil? || rec.compact.empty?)
+        end
+        raise StandardError if (rec.nil? || rec.empty?)
       }
       rec
     end
